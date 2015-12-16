@@ -18,8 +18,8 @@ const _ = regExp(/[ \t\n\r]/).repeat();
 
 const parseInteger: Parser<IntegerNode> =
   regExp(/[0-9]/).repeat(1)
-    .thenSkip(_)
     .withRange()
+    .thenSkip(_)
     .map(([chars, range]) => {
       return {value: parseInt(chars.join("")), range};
     });
@@ -68,9 +68,24 @@ const parseExpr: Parser<Node> =
   )
     .map(buildTree);
 
+const parser = _.thenTake(parseExpr);
+
 describe("Parser", () => {
   it("parses arithmetic", () => {
-    console.log("parsing");
-    console.log(parseExpr.parse("test.txt", "(1 + 2) * 3 + 4"));
+    const source = `
+      (1 + 2)
+        * 3
+        + (4 * 5)
+    `;
+    const expr = parser.parse("test.txt", source) as BinOpNode;
+    const node = (expr.right as BinOpNode).right as IntegerNode;
+    assert.equal(node.value, 5);
+    assert.equal(node.range.begin.filePath, "test.txt");
+    assert.equal(node.range.begin.line, 4);
+    assert.equal(node.range.begin.column, 16);
+    assert.equal(node.range.begin.index, 42);
+    assert.equal(node.range.end.line, 4);
+    assert.equal(node.range.end.column, 17);
+    assert.equal(node.range.end.index, 43);
   });
 });
