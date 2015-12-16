@@ -8,7 +8,7 @@
     "build": "tsc --outDir dist --declaration",
     "test": "tsc && mocha"
   },
-  "author": "",
+  "author": "Ryohei Ikegami <iofg2100@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "colors": "^1.1.2"
@@ -17,5 +17,16 @@
     "chai": "^3.4.1",
     "mocha": "^2.3.4",
     "typescript": "^1.7.5"
-  }
+  },
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/seanchas116/tparse.git"
+  },
+  "bugs": {
+    "url": "https://github.com/seanchas116/tparse/issues"
+  },
+  "homepage": "https://github.com/seanchas116/tparse#readme"
 }
