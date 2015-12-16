@@ -36,6 +36,7 @@ function cacheKey<T>(parser: Parser<T>, index: number) {
   return `${parser.id} ${index}`;
 }
 
+export
 class Cache {
   cache = {};
 
@@ -47,6 +48,7 @@ class Cache {
   }
 }
 
+export
 class FurthestFailure {
   furthest: Failure;
 
@@ -140,6 +142,7 @@ util.inherits(SyntaxError, Error);
 export
 type Result<T> = Success<T> | Failure;
 
+export
 class Tracer {
   last = "";
 

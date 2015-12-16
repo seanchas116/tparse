@@ -39,3 +39,4 @@ node_modules
 
 /src/**/*.js
 /test/**/*.js
+/dist/test
