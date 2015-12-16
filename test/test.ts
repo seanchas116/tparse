@@ -16,7 +16,7 @@ type Node = IntegerNode | BinOpNode;
 
 const _ = regExp(/[ \t\n\r]/).repeat();
 
-const parseInteger: Parser<IntegerNode> =
+const integer: Parser<IntegerNode> =
   regExp(/[0-9]/).repeat(1)
     .withRange()
     .thenSkip(_)
@@ -24,16 +24,16 @@ const parseInteger: Parser<IntegerNode> =
       return {value: parseInt(chars.join("")), range};
     });
 
-function parseToken(str: string) {
+function token(str: string) {
   return string(str).thenSkip(_);
 }
 
-const parseFactor: Parser<Node> =
+const factor: Parser<Node> =
   choose(
-    parseInteger,
-    parseToken("(")
-      .thenTake(lazy(() => parseExpr))
-      .thenSkip(parseToken(")"))
+    integer,
+    token("(")
+      .thenTake(lazy(() => expr))
+      .thenSkip(token(")"))
   )
 
 function buildTree([first, rest]: [Node, [string, Node][]]) {
@@ -44,31 +44,31 @@ function buildTree([first, rest]: [Node, [string, Node][]]) {
   return left;
 }
 
-const parseTerm: Parser<Node> =
+const term: Parser<Node> =
   sequence(
-    parseFactor,
+    factor,
     _.thenTake(
       sequence(
         _.thenTake(choose(string("*"), string("/"))),
-        _.thenTake(parseFactor)
+        _.thenTake(factor)
       ).repeat()
     )
   )
     .map(buildTree);
 
-const parseExpr: Parser<Node> =
+const expr: Parser<Node> =
   sequence(
-    parseTerm,
+    term,
     _.thenTake(
       sequence(
         _.thenTake(choose(string("+"), string("-"))),
-        _.thenTake(parseTerm)
+        _.thenTake(term)
       ).repeat()
     )
   )
     .map(buildTree);
 
-const parser = _.thenTake(parseExpr);
+const parser = _.thenTake(expr);
 
 describe("Parser", () => {
   it("parses arithmetic", () => {
