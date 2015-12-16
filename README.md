@@ -1,6 +1,10 @@
 tparse
 ================
 
+[![NPM](https://nodei.co/npm/tparse.png?mini=true)](https://nodei.co/npm/tparse)
+
+[![Build Status](https://travis-ci.org/seanchas116/tparse.svg)](https://travis-ci.org/seanchas116/tparse)
+
 tparse is a PEG-like parser combinator for TypeScript and JavaScript.
 
 ## Features
@@ -13,6 +17,12 @@ tparse is a PEG-like parser combinator for TypeScript and JavaScript.
 ```
 npm install --save tparse
 ```
+
+## API
+
+Todo
+
+See [index.d.ts](https://github.com/seanchas116/tparse/blob/master/dist/src/index.d.ts) for overall APIs.
 
 ## Example (parsing arithmetic expression)
 
