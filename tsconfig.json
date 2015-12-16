@@ -17,13 +17,12 @@
     "filesGlob": [
         "**/*.ts",
         "**/*.tsx",
+        "!dist/**",
         "!node_modules/**"
     ],
     "compileOnSave": false,
     "buildOnSave": false,
     "files": [
-        "dist/src/index.d.ts",
-        "dist/test/test.d.ts",
         "src/index.ts",
         "test/test.ts",
         "typings/assertion-error/assertion-error.d.ts",
