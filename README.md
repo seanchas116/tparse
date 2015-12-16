@@ -126,3 +126,7 @@ parser.parse("test.txt", "1 + (2 * 3)");
   }
 }
 ```
+
+## Todo
+
+* Performance comparison / tuning
