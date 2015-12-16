@@ -2,8 +2,8 @@
   "name": "tparse",
   "version": "0.1.0",
   "description": "A Parser Combinator for JavaScript/TypeScript",
-  "main": "dist/index.js",
-  "typings": "dist/index.d.ts",
+  "main": "dist/src/index.js",
+  "typings": "dist/src/index.d.ts",
   "scripts": {
     "build": "tsc --outDir dist --declaration",
     "test": "tsc && mocha"
