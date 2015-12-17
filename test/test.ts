@@ -2,6 +2,8 @@ require('source-map-support').install();
 import {assert} from "chai";
 import {SyntaxError, Range, Parser, sequence, choose, string, regExp, lazy} from "../src/index";
 
+const whitespaces = regExp(/[ \t\n\r]/).repeat();
+
 describe("Parser", () => {
 
   describe("map", () => {
@@ -27,11 +29,31 @@ describe("Parser", () => {
       assert.isUndefined(parser.parseString("123"));
       assert.throws(() => parser.parseString("ab123"), "[:1:2]: Expected '/[0-9]/'; found 'b'");
     });
-  })
+  });
   describe("text", () => {
     it("parses as text", () => {
       const parser = regExp(/[0-9]/).repeat().text();
       assert.equal(parser.parseString("01234"), "01234");
     });
-  })
+  });
+  describe("withRange", () => {
+    it("parses content and its range", () => {
+      const parser = whitespaces.thenTake(regExp(/[0-9]/).repeat().text().withRange());
+      const [value, range] = parser.parse("test.txt", "\n  12345");
+      const {begin, end} = range;
+
+      assert.equal(value, "12345");
+      console.log(begin);
+      console.log(end);
+
+      assert.deepEqual(begin, {
+        filePath: "test.txt",
+        index: 3, line: 2, column: 3
+      });
+      assert.deepEqual(end, {
+        filePath: "test.txt",
+        index: 8, line: 2, column: 8
+      });
+    });
+  });
 });
