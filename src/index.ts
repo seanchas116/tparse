@@ -192,14 +192,13 @@ class Parser<T> {
   parse(filePath: string, text: string, trace = false) {
     const state = State.init(filePath, text, trace);
     const result = this.parseFrom(state);
-    if (result instanceof Success) {
-      if (result.state.position.index == text.length) {
-        return result.value;
-      }
-      const nextState = result.state.proceed(1);
-      throw new SyntaxError(nextState.position, ["[EOS]"], nextState.substring(1));
+    if (result instanceof Success && result.state.position.index == text.length) {
+      return result.value;
     }
     const furthestFailure = state.furthestFailure.furthest;
+    if (!furthestFailure) {
+      throw new SyntaxError(result.state.position, ["[end of input]"], result.state.currentChar());
+    }
     throw new SyntaxError(furthestFailure.state.position, [...furthestFailure.expecteds], furthestFailure.state.currentChar());
   }
 
@@ -249,7 +248,7 @@ class Parser<T> {
     });
   }
 
-  mayBe() {
+  maybe() {
     return this.repeat(0, 1).map(xs => xs[0]);
   }
 
