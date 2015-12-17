@@ -26,6 +26,7 @@
     "buildOnSave": false,
     "files": [
         "src/index.ts",
+        "test/arithmetic.ts",
         "test/test.ts",
         "typings/assertion-error/assertion-error.d.ts",
         "typings/chai/chai.d.ts",
