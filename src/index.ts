@@ -128,10 +128,10 @@ class SyntaxError implements Error {
     return this.error["stack"];
   }
 
-  constructor(public range: Range, public expected: string[], public found: string) {
+  constructor(public position: Position, public expected: string[], public found: string) {
     this.error = new Error();
     this.name = "SyntaxError";
-    this.message = `Expected ${
+    this.message = `[${position}]: Expected ${
       expected.map(e => `'${e}'`).join(", ")
     }; found '${found}'`;
   }
@@ -192,12 +192,19 @@ class Parser<T> {
   parse(filePath: string, text: string, trace = false) {
     const state = State.init(filePath, text, trace);
     const result = this.parseFrom(state);
-    if (result instanceof Success && result.state.position.index == text.length) {
-      return result.value;
+    if (result instanceof Success) {
+      if (result.state.position.index == text.length) {
+        return result.value;
+      }
+      const nextState = result.state.proceed(1);
+      throw new SyntaxError(nextState.position, ["[EOS]"], nextState.substring(1));
     }
     const furthestFailure = state.furthestFailure.furthest;
-    const range = new Range(furthestFailure.state.position, furthestFailure.state.proceed(1).position);
-    throw new SyntaxError(range, [...furthestFailure.expecteds], furthestFailure.state.currentChar());
+    throw new SyntaxError(furthestFailure.state.position, [...furthestFailure.expecteds], furthestFailure.state.currentChar());
+  }
+
+  parseString(text: string, trace = false) {
+    return this.parse("", text, trace);
   }
 
   map<U>(transform: (value: T) => U): Parser<U> {
