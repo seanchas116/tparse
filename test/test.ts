@@ -1,6 +1,6 @@
 require('source-map-support').install();
 import {assert} from "chai";
-import {SyntaxError, Range, Parser, sequence, choose, string, regExp, lazy} from "../src/index";
+import {SyntaxError, Position, Range, Parser, sequence, choose, string, regExp, lazy} from "../src/index";
 
 const whitespaces = regExp(/[ \t\n\r]/).repeat();
 
@@ -46,14 +46,8 @@ describe("Parser", () => {
       console.log(begin);
       console.log(end);
 
-      assert.deepEqual(begin, {
-        filePath: "test.txt",
-        index: 3, line: 2, column: 3
-      });
-      assert.deepEqual(end, {
-        filePath: "test.txt",
-        index: 8, line: 2, column: 8
-      });
+      assert.deepEqual(begin, new Position("test.txt", 3, 2, 3));
+      assert.deepEqual(end, new Position("test.txt", 8, 2, 8));
     });
   });
 });
