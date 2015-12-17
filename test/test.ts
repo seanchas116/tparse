@@ -16,7 +16,22 @@ describe("Parser", () => {
       assert.throw(() => parser.parseString("a"), "[:1:2]: Expected '/[a-zA-Z]/'; found ''");
       assert.equal(parser.parseString("ab"), "ab");
       assert.equal(parser.parseString("xyz"), "xyz");
-      assert.throw(() => parser.parseString("hjkl"), "[:1:5]: Expected '[EOS]'; found ''");
+      assert.throw(() => parser.parseString("hjkl"), "[:1:4]: Expected '[end of input]'; found 'l'");
     });
   });
+  describe("maybe", () => {
+    it("parse 0 or 1 repeat", () => {
+      const parser = regExp(/[a-zA-Z]/).maybe()
+        .thenSkip(regExp(/[0-9]/).repeat());
+      assert.equal(parser.parseString("a123"), "a");
+      assert.isUndefined(parser.parseString("123"));
+      assert.throws(() => parser.parseString("ab123"), "[:1:2]: Expected '/[0-9]/'; found 'b'");
+    });
+  })
+  describe("text", () => {
+    it("parses as text", () => {
+      const parser = regExp(/[0-9]/).repeat().text();
+      assert.equal(parser.parseString("01234"), "01234");
+    });
+  })
 });
