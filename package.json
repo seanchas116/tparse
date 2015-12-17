@@ -16,6 +16,7 @@
   "devDependencies": {
     "chai": "^3.4.1",
     "mocha": "^2.3.4",
+    "source-map-support": "^0.4.0",
     "typescript": "^1.7.5"
   },
   "directories": {
