@@ -218,13 +218,6 @@ class Parser<T> {
     });
   }
 
-  forEach(action: (value: T) => void) {
-    return this.map(x => {
-      action(x);
-      return x;
-    });
-  }
-
   repeat(min = 0, max = Infinity) {
     return new Parser(state => {
       const values: T[] = [];
